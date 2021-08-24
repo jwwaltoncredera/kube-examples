@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: awesome-api-a
+  labels:
+    app.kubernetes.io/name: awesome-api-a
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: awesome-api-a
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: awesome-api-a
+    spec:
+      containers:
+        - name: awesome-api-a
+          image: quay.io/awesome-api-a:3.2.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: AWESOME_APP_B_URL
+              value: "http://awesome-app-b:92002"
+            - name: FOO_BACKEND_HOST
+              value: "foo-backed-service"
+            - name: LOG_LEVEL
+              value: "info"
+            - name: PORT
+              value: "8080"
+            - name: RABBITMQ_HOST
+              value: "rabbitmq-awesome-host"
+            - name: RABBITMQ_QUEUE_NAME
+              value: "awesomeness"
+            - name: RABBITMQ_PASS
+              value: "badpass" # create a secret
+            - name: RABBITMQ_PORT
+              value: "5672"
+            - name: RABBITMQ_USER
+              value: "awesome.user1"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi

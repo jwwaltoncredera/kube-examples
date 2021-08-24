@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: awesome-api-a
+  labels:
+    app.kubernetes.io/name: awesome-api-a
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: "awesome-api-a.kube-cluster-1.awesome-corp.com"
+    http:
+      paths:
+        - backend:
+            serviceName: awesome-api-a
+            servicePort: 8080
