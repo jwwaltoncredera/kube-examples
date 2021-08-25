@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: awesome-api-a
-  labels:
-    app.kubernetes.io/name: awesome-api-a
 spec:
   replicas: 3
   selector:
